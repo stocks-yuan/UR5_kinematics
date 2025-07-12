@@ -23,17 +23,24 @@ tool_robot.display();
 view(3);
 tool_robot.teach();
 
-q0 = [-84.84,-84.60,-108.11,-78.76,91.39,-1.78];
-q0 = deg2rad(q0);  
-theta = [93.14,-62.68,108.27,-135.56,-66.46,15.59];
+% q0 = [-84.84,-84.60,-108.11,-78.76,91.39,-1.78];
+% q0 = deg2rad(q0);  
+theta =[-38.65,-147.24,-116.13,-18.80,81.84,63.71];
 theta_rad = deg2rad(theta);  
-% theta_rad = [1,1,1,1,0.000,1];
+
 T = forward_kinematics(theta_rad,d,a,alpha);
 theta2 = inverse_kinematics(T);
+%%%%%%将各个关节角的值转换到[-pi,pi]
+for i=1:8
+    for j=1:6
+        if theta2(i,j)<-pi
+          theta2(i,j)=theta2(i,j)+2*pi;
+        elseif theta2(i,j)>pi 
+          theta2(i,j)=theta2(i,j)-2*pi;
+        else
+           theta2(i,j)=theta2(i,j);
+        end
+    end
+end
 
-qq1 = forward_kinematics(theta2(1,:),d,a,alpha);
-qq2 = forward_kinematics(theta2(2,:),d,a,alpha);
-qq3 = forward_kinematics(theta2(3,:),d,a,alpha);
-qq4 = forward_kinematics(theta2(4,:),d,a,alpha);
-qq5 = forward_kinematics(theta2(5,:),d,a,alpha);
-qq6 = forward_kinematics(theta2(6,:),d,a,alpha);
+disp(theta2)
